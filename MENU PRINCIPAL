@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void quizLupin();
+void gousmasWar();
+void cobraNaCaixa();
+
+int menuFinal(){
+    int op;
+
+    printf("\n====================================\n");
+    printf("1 - Voltar ao menu principal\n");
+    printf("0 - Sair\n");
+    printf("Escolha: ");
+    scanf("%d",&op);
+
+    return op;
+}
+
+int main(){
+
+    int opcao;
+
+    while(1){
+
+        system("cls");
+
+        printf("CENTRAL DE JOGOS\n");
+        printf("====================================\n\n");
+
+        printf("1 - Quiz Lupin\n");
+        printf("2 - Gousmas War\n");
+        printf("3 - Cobra na Caixa\n");
+        printf("0 - Sair\n\n");
+
+        printf("Escolha: ");
+        scanf("%d",&opcao);
+
+        if(opcao==0)
+            break;
+
+        if(opcao==1)
+            quizLupin();
+
+        if(opcao==2)
+            gousmasWar();
+
+        if(opcao==3)
+            cobraNaCaixa();
+
+        if(menuFinal()==0)
+            break;
+    }
+
+    printf("\nObrigado por jogar!\n");
+
+    return 0;
+}
