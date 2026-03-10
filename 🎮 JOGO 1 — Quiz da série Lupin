@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TOTAL_PERGUNTAS 5
+
+void linha(){
+    printf("\n====================================\n\n");
+}
+
+int main(){
+
+    struct Pergunta{
+        char pergunta[200];
+        char opcoes[4][100];
+        char resposta;
+    };
+
+    struct Pergunta quiz[TOTAL_PERGUNTAS]={
+
+    {"Qual e o nome do protagonista da serie Lupin?",
+    {"a) Assane Diop","b) Arsene Lupin","c) Benjamin Ferel","d) Hubert Pellegrini"},'a'},
+
+    {"Em qual cidade a historia acontece?",
+    {"a) Londres","b) Paris","c) Roma","d) Madrid"},'b'},
+
+    {"Quem escreveu Arsene Lupin?",
+    {"a) Victor Hugo","b) Alexandre Dumas","c) Maurice Leblanc","d) Emile Zola"},'c'},
+
+    {"Qual objeto Assane tenta recuperar no inicio da serie?",
+    {"a) Um colar","b) Um anel","c) Um diamante","d) Um quadro"},'a'},
+
+    {"Qual e o nome do pai de Assane?",
+    {"a) Mamadou","b) Babakar","c) Karim","d) Idris"},'b'}
+    };
+
+    int i,j;
+    int pontos=0;
+    char resp;
+
+    printf("QUIZ DA SERIE LUPIN\n");
+    linha();
+
+    for(i=0;i<TOTAL_PERGUNTAS;i++){
+
+        printf("%d) %s\n\n",i+1,quiz[i].pergunta);
+
+        for(j=0;j<4;j++){
+            printf("%s\n",quiz[i].opcoes[j]);
+        }
+
+        printf("\nResposta: ");
+        scanf(" %c",&resp);
+
+        if(resp==quiz[i].resposta || resp==quiz[i].resposta-32){
+            printf("\nCorreto!\n");
+            pontos++;
+        }else{
+            printf("\nErrado! Resposta correta: %c\n",quiz[i].resposta);
+        }
+
+        system("pause");
+        system("cls");
+    }
+
+    printf("Voce acertou %d de %d perguntas, parabens prof \n",pontos,TOTAL_PERGUNTAS);
+
+    return 0;
+}
