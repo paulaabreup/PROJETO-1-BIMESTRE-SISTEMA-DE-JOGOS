@@ -4,6 +4,8 @@ Projeto desenvolvido para a disciplina de Programação 1, com o objetivo de apl
 O sistema funciona como um mini arcade, contendo três minijogos que podem ser acessados através de um menu principal.
 
 
+
+
 🧠 OBJETIVO DO PROJETO:
 
 Este projeto tem como finalidade desenvolver habilidades em:
@@ -13,6 +15,9 @@ Este projeto tem como finalidade desenvolver habilidades em:
 - manipulação de vetores
 - interação com o usuário via console
 - Além disso, o trabalho estimula o raciocínio algorítmico e a resolução de problemas, aplicando conceitos vistos em sala de aula.
+
+
+
 
 
 🕹 ESTRUTURA DO SISTEMA
@@ -28,6 +33,9 @@ Após o término de cada partida, o jogador pode:
 
 - jogar novamente
 - voltar ao menu principal
+
+
+
 
 ❓JOGO 1- PERGUNTAS E RESPOSTAS
 Este jogo apresenta ao usuário cinco perguntas de múltipla escolha sobre a série Lupin, da Netflix.
@@ -53,6 +61,9 @@ Se o jogador errar, o sistema mostra qual era a resposta correta.
 
 
 
+
+
+
 🐍 JOGO 2- COBRA NA CAIXA
 
 Este jogo se passa dentro de uma tumba egípcia.
@@ -74,6 +85,10 @@ Regras do jogo:
 - Os jogadores escolhem caixas alternadamente.
 
 Uma caixa não pode ser escolhida novamente após ser aberta.
+
+
+
+
 
 ⚔️ JOGO 3- GOUSMAS WAR
 
@@ -108,10 +123,17 @@ Condição de vitória:
 
 
 
+
+
+
 💻TECNOLOGIAS USADAS:
 -Linguagem C
 -Compilador Falcon C++
 -Execução em console
+
+
+
+
 
 
 🤖USO DE INTELIGENCIA ARTIFICIAL:
@@ -122,7 +144,6 @@ Durante o desenvolvimento do projeto, a ferramenta ChatGPT foi utilizada como ap
 -corrigir erros de compilação
 -melhorar organização do código
 -Alguns trechos tiveram auxílio direto da IA.
-
 
 
 EXEMPLOS DO MEU USO COM A IA:
@@ -151,10 +172,17 @@ turno = 1 - turno;
 -Esse comando alterna automaticamente o turno entre os jogadores.
 
 
+
+
 👨‍💻AUTORA:Francinetti De Paula Abreu Pessoa
 
 
+
+
 DISCIPLINA: Programação 1
+
+
+
 
 📚 REFERENCIAS:
 Além do material da disciplina, foram consultadas as seguintes fontes:
