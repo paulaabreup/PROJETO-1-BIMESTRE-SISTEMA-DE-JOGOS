@@ -1,32 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
 
+#define TOTAL_PERGUNTAS 5
+#define MAX_GOUSMAS 2
+#define MAX_FURIA 5
+#define NUM_CAIXAS 5
+#define NUM_NOMES 7
+
+void linha();
+int menuFinal();
 void quizLupin();
 void gousmasWar();
 void cobraNaCaixa();
 
-int menuFinal(){
-    int op;
-
-    printf("\n====================================\n");
-    printf("1 - Voltar ao menu principal\n");
-    printf("0 - Sair\n");
-    printf("Escolha: ");
-    scanf("%d",&op);
-
-    return op;
-}
+typedef struct{
+    int furia;
+    int ativa;
+}Gousma;
 
 int main(){
-
     int opcao;
 
     while(1){
 
         system("cls");
 
-        printf("CENTRAL DE JOGOS\n");
-        printf("====================================\n\n");
+        printf("CENTRAL DE JOGOS INTERATIVOS\n");
+        linha();
 
         printf("1 - Quiz Lupin\n");
         printf("2 - Gousmas War\n");
@@ -37,22 +39,385 @@ int main(){
         scanf("%d",&opcao);
 
         if(opcao==0)
-            break;
+        break;
 
-        if(opcao==1)
+        if(opcao==1){
             quizLupin();
+        }
 
-        if(opcao==2)
+        if(opcao==2){
             gousmasWar();
+        }
 
-        if(opcao==3)
+        if(opcao==3){
             cobraNaCaixa();
+        }
 
         if(menuFinal()==0)
-            break;
-    }
-
-    printf("\nObrigado por jogar!\n");
+        break;
+    }   
+    
 
     return 0;
 }
+
+
+
+void linha(){
+    printf("\n====================================\n\n");
+}
+
+int menuFinal(){
+    int op;
+    printf("\n1 - Voltar ao menu principal\n");
+    printf("0 - Sair\n");
+    printf("Escolha: ");
+    scanf("%d",&op);
+    return op;
+}
+
+void quizLupin(){
+
+    struct Pergunta{
+        char pergunta[200];
+        char opcoes[4][100];
+        char resposta;
+    };
+
+    struct Pergunta quiz[TOTAL_PERGUNTAS]={
+
+    {"Qual e o nome do protagonista da serie Lupin?",
+    {"a) Assane Diop","b) Arsene Lupin","c) Benjamin Ferel","d) Hubert Pellegrini"},'a'},
+
+    {"Em qual cidade a historia acontece?",
+    {"a) Londres","b) Paris","c) Roma","d) Madrid"},'b'},
+
+    {"Quem escreveu Arsene Lupin?",
+    {"a) Victor Hugo","b) Alexandre Dumas","c) Maurice Leblanc","d) Emile Zola"},'c'},
+
+    {"Qual objeto Assane tenta recuperar no inicio da serie?",
+    {"a) Um colar","b) Um anel","c) Um diamante","d) Um quadro"},'a'},
+
+    {"Qual e o nome do pai de Assane?",
+    {"a) Mamadou","b) Babakar","c) Karim","d) Idris"},'b'}
+    };
+
+    int i,j,pontos=0;
+    char resp;
+
+    system("cls");
+
+    printf("QUIZ DA SERIE LUPIN\n");
+    linha();
+
+    for(i=0;i<TOTAL_PERGUNTAS;i++){
+
+        printf("%d) %s\n\n",i+1,quiz[i].pergunta);
+
+        for(j=0;j<4;j++){
+            printf("%s\n",quiz[i].opcoes[j]);
+        }
+
+        printf("\nResposta: ");
+        scanf(" %c",&resp);
+
+        if(resp==quiz[i].resposta || resp==quiz[i].resposta-32){
+            printf("\nCorreto!\n");
+            pontos++;
+        }else{
+            printf("\nErrado! Resposta correta: %c\n",quiz[i].resposta);
+        }
+
+        system("pause");
+        system("cls");
+    }
+
+    printf("Voce acertou %d de %d perguntas!\n",pontos,TOTAL_PERGUNTAS);
+}
+
+int contarVivas(Gousma jogador[]) {
+    int count = 0;
+    for (int i = 0; i < MAX_GOUSMAS; i++)
+        if (jogador[i].ativa) count++;
+    return count;
+}
+
+void verificarDestruicao(Gousma jogador[], int idx) {
+    if (jogador[idx].furia > MAX_FURIA) {
+        jogador[idx].ativa = 0;
+        jogador[idx].furia = 0;
+        printf("[ Gousma %d foi destruida! ]\n", idx + 1);
+    }
+}
+
+void gousmasWar() {
+    Gousma jogador[2][MAX_GOUSMAS];
+    int turno = 0;
+    int acao;
+
+    for (int i = 0; i < MAX_GOUSMAS; i++) {
+        jogador[0][i].furia = 1;
+        jogador[1][i].furia = 1;
+        jogador[0][i].ativa = 1;
+        jogador[1][i].ativa = 1;
+    }
+
+    while (1) {
+        system("cls");
+
+        printf("[ GOUSMA WAR ]\n");
+        linha();
+
+        for (int p = 0; p < 2; p++) {
+            printf("Jogador %d\n", p + 1);
+            for (int g = 0; g < MAX_GOUSMAS; g++) {
+                if (jogador[p][g].ativa)
+                    printf("  Gousma %d -> Furia %d\n", g + 1, jogador[p][g].furia);
+                else
+                    printf("  Gousma %d -> [DESTRUIDA]\n", g + 1);
+            }
+            printf("\n");
+        }
+
+        linha();
+
+        // Verificar condicao de vitoria
+        if (contarVivas(jogador[0]) == 0) {
+            printf("Jogador 2 venceu! Todas as Gousmas do Jogador 1 foram destruidas!\n");
+            system("pause");
+            return;
+        }
+        if (contarVivas(jogador[1]) == 0) {
+            printf("Jogador 1 venceu! Todas as Gousmas do Jogador 2 foram destruidas!\n");
+            system("pause");
+            return;
+        }
+
+        printf("Turno Jogador %d\n", turno + 1);
+        printf("1 - Atacar\n");
+        printf("2 - Dividir\n> ");
+        scanf("%d", &acao);
+
+        switch (acao) {
+
+            case 1: { // ATAQUE
+                int gAtacante = -1, gAlvo = -1;
+
+                // Escolher Gousma atacante
+                while (1) {
+                    printf("\n> Atacando <\n");
+                    printf("Escolha Qual Gousma Sua Ira Atacar (apenas as vivas):\n");
+                    for (int g = 0; g < MAX_GOUSMAS; g++)
+                        if (jogador[turno][g].ativa)
+                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[turno][g].furia);
+                    printf("> ");
+                    scanf("%d", &acao);
+
+                    if (acao >= 1 && acao <= MAX_GOUSMAS && jogador[turno][acao-1].ativa) {
+                        gAtacante = acao - 1;
+                        break;
+                    }
+                    printf("Gousma invalida ou destruida!\n");
+                    system("pause");
+                }
+
+                while(1){
+                    printf("\n< Gousma %d escolhida >\n", gAtacante + 1);
+                    printf("Escolha Qual Gousma Inimiga Sera Atacada:\n");
+                    for (int g = 0; g < MAX_GOUSMAS; g++)
+                        if (jogador[1-turno][g].ativa)
+                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[1-turno][g].furia);
+                    printf("> ");
+                    scanf("%d", &acao);
+
+                    if (acao >= 1 && acao <= MAX_GOUSMAS && jogador[1-turno][acao-1].ativa) {
+                        gAlvo = acao - 1;
+                        break;
+                    }
+                    printf("Gousma invalida ou destruida!\n");
+                    system("pause");
+                }
+
+                
+                jogador[1-turno][gAlvo].furia += jogador[turno][gAtacante].furia;
+                printf("\nSua Gousma %d atacou a Gousma %d do inimigo! (+%d de furia)\n",
+                    gAtacante + 1, gAlvo + 1, jogador[turno][gAtacante].furia);
+
+                verificarDestruicao(jogador[1-turno], gAlvo);
+                system("pause");
+                break;
+            }
+
+            case 2: { 
+                
+                int temDoadora = 0;
+                for (int g = 0; g < MAX_GOUSMAS; g++)
+                    if (jogador[turno][g].ativa && jogador[turno][g].furia > 1)
+                        temDoadora = 1;
+
+                
+                if (!temDoadora) {
+                    printf("Nenhuma Gousma sua tem furia suficiente para dividir!\n");
+                    system("pause");
+                    break;
+                }
+
+                int gDoadora = -1, gReceptora = -1, quantidade = 0;
+
+               
+                while (1) {
+                    printf("\n> Dividindo Furia <\n");
+                    printf("Escolha a Gousma que VAI DAR furia (precisa ter furia > 1):\n");
+                    for (int g = 0; g < MAX_GOUSMAS; g++)
+                        if (jogador[turno][g].ativa)
+                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[turno][g].furia);
+                    printf("> ");
+                    scanf("%d", &acao);
+
+                    if (acao >= 1 && acao <= MAX_GOUSMAS
+                        && jogador[turno][acao-1].ativa
+                        && jogador[turno][acao-1].furia > 1) {
+                        gDoadora = acao - 1;
+                        break;
+                    }
+                    printf("Gousma invalida, destruida ou sem furia suficiente!\n");
+                    system("pause");
+                }
+
+               
+                while (1) {
+                    printf("\n< Gousma %d doadora >\n", gDoadora + 1);
+                    printf("Escolha a Gousma que vai RECEBER furia:\n");
+                    printf("(Gousmas destruidas podem RENASCER ao receber furia!)\n");
+                    for (int g = 0; g < MAX_GOUSMAS; g++) {
+                        if (g == gDoadora) continue;
+                        if (jogador[turno][g].ativa)
+                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[turno][g].furia);
+                        else
+                            printf("  %d - Gousma %d [DESTRUIDA - pode renascer!]\n", g + 1, g + 1);
+                    }
+                    printf("> ");
+                    scanf("%d", &acao);
+
+                    if (acao >= 1 && acao <= MAX_GOUSMAS && (acao - 1) != gDoadora) {
+                        gReceptora = acao - 1;
+                        break;
+                    }
+                    printf("Opcao invalida!\n");
+                    system("pause");
+                }
+
+               
+                while (1) {
+                    int maxTransf = jogador[turno][gDoadora].furia - 1;
+                    printf("\nQuantos pontos de furia transferir? (1 a %d)\n> ", maxTransf);
+                    scanf("%d", &quantidade);
+
+                    if (quantidade >= 1 && quantidade <= maxTransf) break;
+
+                    printf("Quantidade invalida! Deve ser entre 1 e %d.\n", maxTransf);
+                    system("pause");
+                }
+
+                
+                int estavaDestruida = !jogador[turno][gReceptora].ativa;
+
+                jogador[turno][gDoadora].furia   -= quantidade;
+                jogador[turno][gReceptora].furia += quantidade;
+
+                if (estavaDestruida) {
+                    jogador[turno][gReceptora].ativa = 1;
+                    printf("\nGousma %d renasceu com furia %d!\n",
+                        gReceptora + 1, jogador[turno][gReceptora].furia);
+                } else {
+                    printf("\nGousma %d transferiu %d de furia para Gousma %d!\n",
+                        gDoadora + 1, quantidade, gReceptora + 1);
+                }
+
+                
+                verificarDestruicao(jogador[turno], gReceptora);
+                system("pause");
+                break;
+            }
+
+            default:
+                printf("Valor invalido!\n");
+                system("pause");
+                break;
+        }
+
+        turno = 1 - turno;
+    }
+}
+
+void cobraNaCaixa(){
+
+    char *nomes[NUM_NOMES]={"Paulo","Cleber","Banna","Alycia","Arthur","Paula","Marcello"};
+    char jogadores[2][50];
+
+    int botao,cobra;
+    int caixasAbertas[NUM_CAIXAS];
+
+    int turno;
+    int caixa;
+
+    int i,j,escolha;
+
+    srand(time(NULL));
+
+    system("cls");
+
+    printf("COBRA NA CAIXA\n");
+    linha();
+
+    for(i=0;i<NUM_CAIXAS;i++)
+        caixasAbertas[i]=0;
+
+    for(i=0;i<2;i++){
+
+        printf("Jogador %d escolha nome\n",i+1);
+
+        for(j=0;j<NUM_NOMES;j++)
+        printf("%d - %s\n",j+1,nomes[j]);
+
+        scanf("%d",&escolha);
+        strcpy(jogadores[i],nomes[escolha-1]);
+    }
+
+    botao=rand()%NUM_CAIXAS;
+
+    do{
+        cobra=rand()%NUM_CAIXAS;
+    }while(cobra==botao);
+
+    turno=rand()%2;
+
+    while(1){
+
+        printf("\n%s escolha caixa (1-5): ",jogadores[turno]);
+        scanf("%d",&caixa);
+        caixa--;
+
+        if(caixa==botao){
+
+            printf("%s encontrou o BOTAO e venceu!\n",jogadores[turno]);
+            break;
+        }
+
+        else if(caixa==cobra){
+
+            printf("%s encontrou a COBRA e perdeu!\n",jogadores[turno]);
+            break;
+        }
+
+        else{
+
+            printf("Caixa vazia!\n");
+        }
+
+        turno=1-turno;
+    }
+}
+
+
+
