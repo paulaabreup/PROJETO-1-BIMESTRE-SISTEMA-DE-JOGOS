@@ -1,113 +1,43 @@
-int contarVivas(Gousma jogador[]) {
-    int count = 0;
-    for (int i = 0; i < MAX_GOUSMAS; i++)
-        if (jogador[i].ativa) count++;
-    return count;
-}
+void cobraNaCaixa(){
+    char *nomes[NUM_NOMES]={"Paulo","Cleber","Banna","Alycia","Arthur","Paula","Marcello"};
+    char jogadores[2][50];
+    int botao,cobra, turno, caixa, i, j, escolha;
+    int caixasAbertas[NUM_CAIXAS];
 
-void verificarDestruicao(Gousma jogador[], int idx) {
-    if (jogador[idx].furia > MAX_FURIA) {
-        jogador[idx].ativa = 0;
-        jogador[idx].furia = 0;
-        printf("[ Gousma %d foi destruida! ]\n", idx + 1);
-    }
-}
+    srand(time(NULL));
+    system("cls");
+    printf("COBRA NA CAIXA\n");
+    linha();
 
-void gousmasWar() {
-    Gousma jogador[2][MAX_GOUSMAS];
-    int turno = 0;
-    int acao;
+    for(i=0;i<NUM_CAIXAS;i++) caixasAbertas[i]=0;
 
-    for (int i = 0; i < MAX_GOUSMAS; i++) {
-        jogador[0][i].furia = 1;
-        jogador[1][i].furia = 1;
-        jogador[0][i].ativa = 1;
-        jogador[1][i].ativa = 1;
+    for(i=0;i<2;i++){
+        printf("Jogador %d escolha nome\n",i+1);
+        for(j=0;j<NUM_NOMES;j++) printf("%d - %s\n",j+1,nomes[j]);
+        scanf("%d",&escolha);
+        strcpy(jogadores[i],nomes[escolha-1]);
     }
 
-    while (1) {
-        system("cls");
-        printf("[ GOUSMA WAR ]\n");
-        linha();
+    botao=rand()%NUM_CAIXAS;
+    do{ cobra=rand()%NUM_CAIXAS; }while(cobra==botao);
+    turno=rand()%2;
 
-        for (int p = 0; p < 2; p++) {
-            printf("Jogador %d\n", p + 1);
-            for (int g = 0; g < MAX_GOUSMAS; g++) {
-                if (jogador[p][g].ativa)
-                    printf("  Gousma %d -> Furia %d\n", g + 1, jogador[p][g].furia);
-                else
-                    printf("  Gousma %d -> [DESTRUIDA]\n", g + 1);
-            }
-            printf("\n");
+    while(1){
+        printf("\n%s escolha caixa (1-5): ",jogadores[turno]);
+        scanf("%d",&caixa);
+        caixa--;
+
+        if(caixa==botao){
+            printf("%s encontrou o BOTAO e venceu!\n",jogadores[turno]);
+            break;
         }
-
-        linha();
-
-        if (contarVivas(jogador[0]) == 0) {
-            printf("Jogador 2 venceu! Todas as Gousmas do Jogador 1 foram destruidas!\n");
-            system("pause");
-            return;
+        else if(caixa==cobra){
+            printf("%s encontrou a COBRA e perdeu!\n",jogadores[turno]);
+            break;
         }
-        if (contarVivas(jogador[1]) == 0) {
-            printf("Jogador 1 venceu! Todas as Gousmas do Jogador 2 foram destruidas!\n");
-            system("pause");
-            return;
+        else{
+            printf("Caixa vazia!\n");
         }
-
-        printf("Turno Jogador %d\n", turno + 1);
-        printf("1 - Atacar\n");
-        printf("2 - Dividir\n> ");
-        scanf("%d", &acao);
-
-        switch (acao) {
-            case 1: { // ATAQUE
-                int gAtacante = -1, gAlvo = -1;
-                while (1) {
-                    printf("\n> Atacando <\n");
-                    printf("Escolha Qual Gousma Sua Ira Atacar:\n");
-                    for (int g = 0; g < MAX_GOUSMAS; g++)
-                        if (jogador[turno][g].ativa)
-                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[turno][g].furia);
-                    printf("> ");
-                    scanf("%d", &acao);
-                    if (acao >= 1 && acao <= MAX_GOUSMAS && jogador[turno][acao-1].ativa) {
-                        gAtacante = acao - 1;
-                        break;
-                    }
-                    printf("Gousma invalida!\n");
-                    system("pause");
-                }
-
-                while(1){
-                    printf("\n< Gousma %d escolhida >\n", gAtacante + 1);
-                    printf("Escolha Qual Gousma Inimiga Sera Atacada:\n");
-                    for (int g = 0; g < MAX_GOUSMAS; g++)
-                        if (jogador[1-turno][g].ativa)
-                            printf("  %d - Gousma %d (Furia %d)\n", g + 1, g + 1, jogador[1-turno][g].furia);
-                    printf("> ");
-                    scanf("%d", &acao);
-                    if (acao >= 1 && acao <= MAX_GOUSMAS && jogador[1-turno][acao-1].ativa) {
-                        gAlvo = acao - 1;
-                        break;
-                    }
-                    printf("Gousma invalida!\n");
-                    system("pause");
-                }
-                
-                jogador[1-turno][gAlvo].furia += jogador[turno][gAtacante].furia;
-                verificarDestruicao(jogador[1-turno], gAlvo);
-                system("pause");
-                break;
-            }
-
-            case 2: { // DIVIDIR
-                int gDoadora = -1, gReceptora = -1, quantidade = 0;
-                // ... (Lógica de divisão de fúria conforme código original)
-                // Nota: O código original de divisão foi simplificado aqui para manter o README legível, 
-                // mas você deve colar a função gousmasWar completa neste bloco.
-                break;
-            }
-        }
-        turno = 1 - turno;
+        turno=1-turno;
     }
 }
