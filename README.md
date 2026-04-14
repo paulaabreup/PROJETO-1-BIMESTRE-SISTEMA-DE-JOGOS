@@ -128,7 +128,7 @@ Condição de vitória:
 
 💻TECNOLOGIAS USADAS:
 -Linguagem C
--Compilador Falcon C++
+-Compilador VS CODE
 -Execução em console
 
 
